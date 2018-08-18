@@ -2,6 +2,7 @@ USE bamazon;
 
 INSERT INTO products (item_id,product_name,department_name,price,stock_quantity)
 values(1,'NBA 2K19','Electronics', 59.96,250);
+
 INSERT INTO products (item_id,product_name,department_name,price,stock_quantity)
 values(2,'Fallout 76','Electronics',59.99, 200);
 
