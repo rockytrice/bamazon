@@ -32,28 +32,30 @@ function customerOrder() {
                 type: "input",
                 message: "What's the  ID of the product  would you like to buy?"
             },
-            {
-                name: "buy",
-                type: "input",
-                message: "How many units would you like to buy?"
-            }
+            // {
+            //     name: "buy",
+            //     type: "input",
+            //     message: "How many units would you like to buy?"
+            // }
 
         ])
         .then(function (input) {
             var item = input.item_id;
             var quanity = input.quanity;
-            var query = "SELECT FROM products WHERE ?";
+            var query = "SELECT * FROM products WHERE ?";
             connection.query(query, {
                 item_id: item
             }, function (err, res) {
                 if (err) throw err;
+                if (res.length === 0) {
+                    console.log("invalid product id. Please enter a valid id");
 
-
+                }
             });
 
+            connection.end();
 
         });
-
 
 
 }
