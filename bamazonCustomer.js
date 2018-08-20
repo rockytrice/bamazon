@@ -51,9 +51,14 @@ function customerOrder() {
                     
                 }
                 // checking if the store has enough product to meet the request
-                if(res[0].stock_quantity >=answers.quantity){
+                if(res[0].stock_quantity > answers.quantity){
                     console.log("Product is in stock and your order has been placed");
-
+                   var quantityUpdate = 'UPDATE products SET stock_quantity=' + (res[0].stock_quantity - answers.quantity) + ' WHERE item_id= ' + answers.order;
+                    connection.query(quantityUpdate,function(err,res){
+                        if(err) throw err
+                        console.log("Your order has been placed");
+                        console.log('quantityUpdate = ' + quantityUpdate);
+                    })
                 }
                 else{
                     console.log("Your order can not be completed.There is not enough product in stock. Please update your order");
