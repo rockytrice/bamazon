@@ -14,17 +14,32 @@ var connection = mysql.createConnection({
 // connecting to bamazon database
 connection.connect(function (err) {
     if (err) throw err;
-    console.log('connected as id ' + connection.threadId);
-    // showInventory();
+    // console.log('connected as id ' + connection.threadId);
+
+    showInventory();
 
     customerOrder();
+
+    
+    //  console.log('-----------------------------------------------\n')
+
 
 });
 
 
 // functions-------------------------------------------------------------------------------------------------------------------
+function showInventory(){
+    connection.query('SELECT * FROM products',function(err,res){
+        if (err) throw err;
+        console.log('\n');
+        
+        console.table(res);
+    });
+    
+}
 // questions for ordering a product
 function customerOrder() {
+    
     inquirer
         .prompt([{
                 name: "order",
@@ -41,56 +56,36 @@ function customerOrder() {
         .then(function (answers) {
             // console.log("item id: " + answers.order);
             // console.log('quantity: ' + answers.quantity);
-             var query = "SELECT item_id,price,product_name,stock_quantity FROM products WHERE ?";
-             connection.query(query, {item_id:answers.order}, function (err, res) {
-                 if (err) throw err
+            var query = "SELECT item_id,price,product_name,stock_quantity FROM products WHERE ?";
+            connection.query(query, {
+                item_id: answers.order
+            }, function (err, res) {
+                if (err) throw err
 
                 if (res.length === 0) {
-                    console.log("Please enter a valid product ID");
+                    console.log("Please enter a valid product ID " + "\n");
                     customerOrder();
-                    
                 }
+
                 // checking if the store has enough product to meet the request
-                if(res[0].stock_quantity > answers.quantity){
+                if (res[0].stock_quantity > answers.quantity) {
                     console.log("Product is in stock and your order has been placed");
-                   var quantityUpdate = 'UPDATE products SET stock_quantity=' + (res[0].stock_quantity - answers.quantity) + ' WHERE item_id= ' + answers.order;
-                    connection.query(quantityUpdate,function(err,res){
-                        if(err) throw err
+                    var quantityUpdate = 'UPDATE products SET stock_quantity=' + (res[0].stock_quantity - answers.quantity) + ' WHERE item_id= ' + answers.order;
+                    connection.query(quantityUpdate, function (err, res) {
+                        if (err) throw err
                         console.log("Your order has been placed");
                         console.log('quantityUpdate = ' + quantityUpdate);
+                        showInventory();
                     })
-                }
-                else{
+                } else {
                     console.log("Your order can not be completed.There is not enough product in stock. Please update your order");
-                    
+                    customerOrder();
+
                 }
-             })
+            })
 
 
         })
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-// else  {
-//     var productQuantity = res[0];
-//     console.log("product quantity is" + productQuantity.stock_quantity);
-
-//     if (quantity <= productQuantity.stock_quantity) {
-//         console.log(' the product you requested is in stock! Placing order!');
-
-//     }
-//     connection.end();
-
-// };
+    
