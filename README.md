@@ -12,7 +12,7 @@ The app should then prompt users with two messages.
  
 ![Alt Text](http://g.recordit.co/SDY1a1ImtV.gif)
 <h1>Technologies Used:</h1>
-<p>Javascript</p>
-<p>MySQL</p>
-<p>MySQL npm package</p>
-<p>inquirer npm package</p>
+<h3>Javascript</h3>
+<h3>MySQL</h3>
+<h3>MySQL npm package</h3>
+<h3>inquirer npm package</h3>
